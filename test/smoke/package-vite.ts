@@ -12,6 +12,9 @@ async function main() {
 		base: '/test/smoke/vite/dist/',
 		build: {
 			minify: false
+		},
+		worker: {
+			format: 'es'
 		}
 	});
 }

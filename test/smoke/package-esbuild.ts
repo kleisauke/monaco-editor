@@ -21,8 +21,9 @@ build({
 	entryPoints: workerEntryPoints.map((entry) =>
 		path.join(__dirname, `../../out/monaco-editor/esm/${entry}`)
 	),
+	entryNames: '[name]',
 	bundle: true,
-	format: 'iife',
+	format: 'esm',
 	logLevel: 'silent',
 	outbase: path.join(__dirname, '../../out/monaco-editor/esm/'),
 	outdir: path.join(__dirname, 'esbuild/out')
@@ -31,7 +32,7 @@ build({
 build({
 	entryPoints: [path.join(__dirname, 'esbuild/index.js')],
 	bundle: true,
-	format: 'iife',
+	format: 'esm',
 	logLevel: 'silent',
 	outdir: path.join(__dirname, 'esbuild/out'),
 	loader: {

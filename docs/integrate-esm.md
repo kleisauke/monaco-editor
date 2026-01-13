@@ -70,23 +70,9 @@ import * as monaco from 'monaco-editor';
 
 // Since packaging is done by you, you need
 // to instruct the editor how you named the
-// bundles that contain the web workers.
+// bundle that contain the editor web worker.
 self.MonacoEnvironment = {
-	getWorkerUrl: function (moduleId, label) {
-		if (label === 'json') {
-			return './json.worker.bundle.js';
-		}
-		if (label === 'css' || label === 'scss' || label === 'less') {
-			return './css.worker.bundle.js';
-		}
-		if (label === 'html' || label === 'handlebars' || label === 'razor') {
-			return './html.worker.bundle.js';
-		}
-		if (label === 'typescript' || label === 'javascript') {
-			return './ts.worker.bundle.js';
-		}
-		return './editor.worker.bundle.js';
-	}
+	getWorkerUrl: () => './editor.worker.bundle.js',
 };
 
 monaco.editor.create(document.getElementById('container'), {
@@ -103,12 +89,8 @@ const path = require('path');
 module.exports = {
 	entry: {
 		app: './index.js',
-		// Package each language's worker and give these filenames in `getWorkerUrl`
+		// Monaco editor web worker entry (used by `getWorkerUrl`)
 		'editor.worker': 'monaco-editor/esm/vs/editor/editor.worker.js',
-		'json.worker': 'monaco-editor/esm/vs/language/json/json.worker',
-		'css.worker': 'monaco-editor/esm/vs/language/css/css.worker',
-		'html.worker': 'monaco-editor/esm/vs/language/html/html.worker',
-		'ts.worker': 'monaco-editor/esm/vs/language/typescript/ts.worker'
 	},
 	output: {
 		globalObject: 'self',
@@ -136,29 +118,16 @@ module.exports = {
 
 A full working sample is available at https://github.com/microsoft/monaco-editor/tree/main/samples/browser-esm-parcel
 
-When using parcel, we need to use the `getWorkerUrl` function and build the workers seperately from our main source. To simplify things, we can write a tiny bash script to build the workers for us.
+When using parcel, we need to use the `getWorkerUrl` function to find the editor worker. Importing the worker with the `url:` prefix tells parcel to emit the worker as a separate file and return its URL.
 
 - `index.js`
 
 ```js
+import EditorWorker from 'url:monaco-editor/esm/vs/editor/editor.worker.js';
 import * as monaco from 'monaco-editor';
 
 self.MonacoEnvironment = {
-	getWorkerUrl: function (moduleId, label) {
-		if (label === 'json') {
-			return './json.worker.js';
-		}
-		if (label === 'css' || label === 'scss' || label === 'less') {
-			return './css.worker.js';
-		}
-		if (label === 'html' || label === 'handlebars' || label === 'razor') {
-			return './html.worker.js';
-		}
-		if (label === 'typescript' || label === 'javascript') {
-			return './ts.worker.js';
-		}
-		return './editor.worker.js';
-	}
+	getWorkerUrl: () => EditorWorker,
 };
 
 monaco.editor.create(document.getElementById('container'), {
@@ -167,22 +136,23 @@ monaco.editor.create(document.getElementById('container'), {
 });
 ```
 
-- `build_workers.sh`
+- `index.html`
 
-```sh
-ROOT=$PWD/node_modules/monaco-editor/esm/vs
-OPTS="--no-source-maps --log-level 1"        # Parcel options - See: https://parceljs.org/cli.html
+```html
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	</head>
+	<body>
+		<div id="container" style="width: 800px; height: 600px; border: 1px solid #ccc"></div>
 
-parcel build $ROOT/language/json/json.worker.js $OPTS
-parcel build $ROOT/language/css/css.worker.js $OPTS
-parcel build $ROOT/language/html/html.worker.js $OPTS
-parcel build $ROOT/language/typescript/ts.worker.js $OPTS
-parcel build $ROOT/editor/editor.worker.js $OPTS
+		<script type="module" src="index.js"></script>
+	</body>
+</html>
 ```
 
-Then, simply run `sh ./build_workers.sh && parcel index.html`. This builds the workers into the same directory as your main bundle (usually `./dist`). If you want to change the `--out-dir` of the workers, you must change the paths in `index.js` to reflect their new location.
-
-_note - the `getWorkerUrl` paths are relative to the build directory of your src bundle_
+Then, simply run `parcel index.html`.
 
 ---
 
@@ -192,34 +162,10 @@ Adding monaco editor to [Vite](https://vitejs.dev/) is simple since it has built
 
 ```js
 import * as monaco from 'monaco-editor';
+import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
 
 self.MonacoEnvironment = {
-	getWorker: function (workerId, label) {
-		const getWorkerModule = (moduleUrl, label) => {
-			return new Worker(self.MonacoEnvironment.getWorkerUrl(moduleUrl), {
-				name: label,
-				type: 'module'
-			});
-		};
-
-		switch (label) {
-			case 'json':
-				return getWorkerModule('/monaco-editor/esm/vs/language/json/json.worker?worker', label);
-			case 'css':
-			case 'scss':
-			case 'less':
-				return getWorkerModule('/monaco-editor/esm/vs/language/css/css.worker?worker', label);
-			case 'html':
-			case 'handlebars':
-			case 'razor':
-				return getWorkerModule('/monaco-editor/esm/vs/language/html/html.worker?worker', label);
-			case 'typescript':
-			case 'javascript':
-				return getWorkerModule('/monaco-editor/esm/vs/language/typescript/ts.worker?worker', label);
-			default:
-				return getWorkerModule('/monaco-editor/esm/vs/editor/editor.worker?worker', label);
-		}
-	}
+	getWorker: () => new editorWorker(),
 };
 
 monaco.editor.create(document.getElementById('container'), {
