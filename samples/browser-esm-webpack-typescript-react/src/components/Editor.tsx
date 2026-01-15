@@ -1,11 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import * as monaco from 'monaco-editor';
 
-// @ts-ignore
-self.MonacoEnvironment = {
-  getWorkerUrl: () => './editor.worker.bundle.js',
-};
-
 export const Editor: React.FC = () => {
 	const divEl = useRef<HTMLDivElement>(null);
 	let editor: monaco.editor.IStandaloneCodeEditor;

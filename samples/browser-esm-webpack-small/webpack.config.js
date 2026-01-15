@@ -4,11 +4,9 @@ const TerserPlugin = require('terser-webpack-plugin');
 module.exports = {
 	mode: 'production',
 	entry: {
-		app: './index.js',
-		'editor.worker': 'monaco-editor/esm/vs/editor/editor.worker.js'
+		app: './index.js'
 	},
 	output: {
-		globalObject: 'self',
 		filename: '[name].bundle.js',
 		path: path.resolve(__dirname, 'dist')
 	},

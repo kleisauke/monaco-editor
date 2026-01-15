@@ -53,10 +53,6 @@ if (
 }
 
 function getWorker(descriptor: { label: string; moduleId: string; createWorker?: () => Worker }): Worker | Promise<Worker> {
-	if (descriptor.createWorker) {
-		return descriptor.createWorker();
-	}
-
 	const label = descriptor.label;
 	// Option for hosts to overwrite the worker script (used in the standalone editor)
 	interface IMonacoEnvironment {
@@ -75,6 +71,10 @@ function getWorker(descriptor: { label: string; moduleId: string; createWorker?:
 				{ name: label, type: 'module' }
 			);
 		}
+	}
+
+	if (descriptor.createWorker) {
+		return descriptor.createWorker();
 	}
 
 	// const esmWorkerLocation = descriptor.esmModuleLocation;

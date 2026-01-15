@@ -13,9 +13,7 @@ webpack(
 	{
 		mode: 'development',
 		entry: {
-			app: './index.js',
-			// Monaco editor web worker entry (used by `getWorkerUrl`)
-			'editor.worker': 'monaco-editor/esm/vs/editor/editor.worker.js'
+			app: './index.js'
 		},
 		context: path.join(__dirname, 'webpack'),
 		output: {

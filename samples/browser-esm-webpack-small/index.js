@@ -131,10 +131,6 @@ import 'monaco-editor/esm/vs/basic-languages/python/python.contribution.js';
 // import 'monaco-editor/esm/vs/basic-languages/yaml/yaml.contribution.js';
 // END_LANGUAGES
 
-self.MonacoEnvironment = {
-	getWorkerUrl: () => './editor.worker.bundle.js',
-};
-
 monaco.editor.create(document.getElementById('container'), {
 	value: [
 		'from banana import *',

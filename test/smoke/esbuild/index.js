@@ -5,8 +5,4 @@
 
 import * as monaco from '../../../out/monaco-editor/esm/vs/editor/editor.main.js';
 
-self.MonacoEnvironment = {
-	getWorkerUrl: () => './out/editor.worker.js',
-};
-
 window.monacoAPI = monaco;

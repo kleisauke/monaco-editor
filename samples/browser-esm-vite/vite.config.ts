@@ -15,5 +15,8 @@ export default defineConfig({
 			find: 'monaco-editor-core',
 			replacement: join(__dirname, '../../../vscode/src/vs/editor/editor.main.ts')
 		}],
+	},
+	worker: {
+		format: 'es'
 	}
 });

@@ -4,14 +4,12 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 module.exports = {
 	mode: 'development',
 	entry: {
-		app: './src/index.ts',
-		'editor.worker': 'monaco-editor/esm/vs/editor/editor.worker.js',
+		app: './src/index.ts'
 	},
 	resolve: {
 		extensions: ['.ts', '.js']
 	},
 	output: {
-		globalObject: 'self',
 		filename: '[name].bundle.js',
 		path: path.resolve(__dirname, 'dist')
 	},

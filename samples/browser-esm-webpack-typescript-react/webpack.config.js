@@ -7,8 +7,7 @@ const isDevelopment = process.env.NODE_ENV !== 'production';
 module.exports = {
 	mode: 'development',
 	entry: {
-		app: './src/index.tsx',
-		'editor.worker': 'monaco-editor/esm/vs/editor/editor.worker.js',
+		app: './src/index.tsx'
 	},
 	devServer: {
 		hot: true
@@ -17,7 +16,6 @@ module.exports = {
 		extensions: ['*', '.js', '.jsx', '.tsx', '.ts']
 	},
 	output: {
-		globalObject: 'self',
 		filename: '[name].bundle.js',
 		path: path.resolve(__dirname, 'dist')
 	},
