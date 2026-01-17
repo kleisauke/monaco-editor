@@ -1,4 +1,5 @@
 const path = require('path');
+const { EsmUrlPlugin } = require('@vscode/esm-url-webpack-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -31,6 +32,7 @@ module.exports = {
 		]
 	},
 	plugins: [
+		new EsmUrlPlugin(),
 		new HtmlWebPackPlugin({
 			title: 'Monaco Editor Sample'
 		})

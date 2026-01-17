@@ -33,6 +33,7 @@ monaco.editor.create(document.getElementById('container'), {
 
 ```js
 const path = require('path');
+const { EsmUrlPlugin } = require('@vscode/esm-url-webpack-plugin');
 
 module.exports = {
 	entry: {
@@ -53,7 +54,8 @@ module.exports = {
 				use: ['file-loader']
 			}
 		]
-	}
+	},
+	plugins: [new EsmUrlPlugin()]
 };
 ```
 
@@ -98,11 +100,24 @@ Then, simply run `parcel index.html`.
 
 A full working sample is available at https://github.com/microsoft/monaco-editor/tree/main/samples/browser-esm-vite.
 
+- `index.js`
+
 ```js
 import * as monaco from 'monaco-editor';
 
 monaco.editor.create(document.getElementById('container'), {
 	value: "function hello() {\n\talert('Hello world!');\n}",
 	language: 'javascript'
+});
+```
+
+- `vite.config.js`
+
+```js
+import { defineConfig } from 'vite';
+import { esmUrlPlugin } from '@vscode/rollup-plugin-esm-url';
+
+export default defineConfig({
+  plugins: [esmUrlPlugin()]
 });
 ```

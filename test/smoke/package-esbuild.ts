@@ -6,28 +6,9 @@
 import * as esbuild from 'esbuild';
 import * as path from 'path';
 import { removeDir } from '../../build/fs';
+import { esmUrlPlugin } from '@vscode/esbuild-plugin-esm-url';
 
 removeDir('test/smoke/esbuild/out');
-
-const workerEntryPoints = [
-	'vs/language/json/json.worker.js',
-	'vs/language/css/css.worker.js',
-	'vs/language/html/html.worker.js',
-	'vs/language/typescript/ts.worker.js',
-	'vs/editor/editor.worker.js'
-];
-
-build({
-	entryPoints: workerEntryPoints.map((entry) =>
-		path.join(__dirname, `../../out/monaco-editor/esm/${entry}`)
-	),
-	entryNames: '[name]',
-	bundle: true,
-	format: 'esm',
-	logLevel: 'silent',
-	outbase: path.join(__dirname, '../../out/monaco-editor/esm/'),
-	outdir: path.join(__dirname, 'esbuild/out')
-});
 
 build({
 	entryPoints: [path.join(__dirname, 'esbuild/index.js')],
@@ -37,7 +18,8 @@ build({
 	outdir: path.join(__dirname, 'esbuild/out'),
 	loader: {
 		'.ttf': 'file'
-	}
+	},
+	plugins: [esmUrlPlugin()]
 });
 
 function build(opts: esbuild.BuildOptions) {

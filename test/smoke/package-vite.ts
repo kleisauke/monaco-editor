@@ -5,6 +5,7 @@
 
 import * as vite from 'vite';
 import * as path from 'path';
+import { esmUrlPlugin } from '@vscode/rollup-plugin-esm-url';
 
 async function main() {
 	await vite.build({
@@ -13,9 +14,7 @@ async function main() {
 		build: {
 			minify: false
 		},
-		worker: {
-			format: 'es'
-		}
+		plugins: [esmUrlPlugin()]
 	});
 }
 

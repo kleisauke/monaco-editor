@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import { join } from 'path';
+import { esmUrlPlugin } from '@vscode/rollup-plugin-esm-url';
 
 export default defineConfig({
 	server: {
@@ -16,7 +17,5 @@ export default defineConfig({
 			replacement: join(__dirname, '../../../vscode/src/vs/editor/editor.main.ts')
 		}],
 	},
-	worker: {
-		format: 'es'
-	}
+	plugins: [esmUrlPlugin()]
 });

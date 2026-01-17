@@ -1,4 +1,5 @@
 const path = require('path');
+const { EsmUrlPlugin } = require('@vscode/esm-url-webpack-plugin');
 
 module.exports = {
 	entry: {
@@ -19,5 +20,6 @@ module.exports = {
 				use: ['file-loader']
 			}
 		]
-	}
+	},
+	plugins: [new EsmUrlPlugin()]
 };

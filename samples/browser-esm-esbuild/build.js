@@ -8,25 +8,9 @@
 const esbuild = require('esbuild');
 const path = require('path');
 const fs = require('fs');
+const { esmUrlPlugin } = require('@vscode/esbuild-plugin-esm-url');
 
 removeDir('dist', (entry) => /index.html$/.test(entry));
-
-const workerEntryPoints = [
-	'vs/language/json/json.worker.js',
-	'vs/language/css/css.worker.js',
-	'vs/language/html/html.worker.js',
-	'vs/language/typescript/ts.worker.js',
-	'vs/editor/editor.worker.js'
-];
-
-build({
-	entryPoints: workerEntryPoints.map((entry) => `../node_modules/monaco-editor/esm/${entry}`),
-	bundle: true,
-	entryNames: '[name]',
-	format: 'esm',
-	outbase: '../node_modules/monaco-editor/esm/',
-	outdir: path.join(__dirname, 'dist')
-});
 
 build({
 	entryPoints: ['index.js'],
@@ -35,7 +19,8 @@ build({
 	outdir: path.join(__dirname, 'dist'),
 	loader: {
 		'.ttf': 'file'
-	}
+	},
+	plugins: [esmUrlPlugin()]
 });
 
 /**

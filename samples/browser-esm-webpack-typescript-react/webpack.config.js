@@ -1,4 +1,5 @@
 const path = require('path');
+const { EsmUrlPlugin } = require('@vscode/esm-url-webpack-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
@@ -45,6 +46,7 @@ module.exports = {
 		]
 	},
 	plugins: [
+		new EsmUrlPlugin(),
 		new HtmlWebPackPlugin({
 			template: 'src/index.html'
 		}),
