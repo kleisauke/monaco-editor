@@ -62,10 +62,7 @@ export class WorkerManager {
 				this._worker = createWebWorker<TypeScriptWorker>({
 					// module that exports the create() method and returns a `TypeScriptWorker` instance
 					moduleId: 'vs/language/typescript/tsWorker',
-					createWorker: () => new Worker(
-						new URL('./ts.worker.ts?esm', import.meta.url), // webpackChunkName: "monaco-ts.worker"
-						{ type: 'module' }
-					),
+					createWorker: () => new Worker(new URL('./ts.worker?esm', import.meta.url), { type: 'module' }),
 
 					label: this._modeId,
 
