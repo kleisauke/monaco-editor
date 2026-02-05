@@ -5,8 +5,8 @@
 		"build": "tsc && vite build",
 		"serve": "vite preview"
 	},
-	"dependencies": {},
 	"devDependencies": {
+		"@vscode/rollup-plugin-esm-url": "^1.0.1-0",
 		"monaco-editor": "file:../../out/monaco-editor",
 		"typescript": "^5.9.3",
 		"vite": "^7.1.11"
